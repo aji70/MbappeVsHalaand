@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --font-outfit: 'Outfit', sans-serif;
+
+  /* Premium Dark Theme Colors */
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #121212;
+  --color-accent: #00ff88;
+  /* Neon Green for betting/money */
+  --color-accent-glow: rgba(0, 255, 136, 0.4);
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-border: #27272a;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0a0a0a] font-sans antialiased;
+    color: var(--color-text-primary);
+    font-family: var(--font-outfit);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-[#00ff88] text-black font-bold rounded-xl hover:bg-[#00cc6a] transition-all duration-300 active:scale-95;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+  }
+
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl;
+  }
+
+  .input-field {
+    @apply w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-[#00ff88]/50 transition-colors duration-300;
+  }
+}
