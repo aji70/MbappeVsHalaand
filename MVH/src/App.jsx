@@ -3,6 +3,8 @@ import FaceOff from './components/FaceOff';
 import BettingCard from './components/BettingCard';
 import ShareModal from './components/ShareModal';
 
+import Navbar from './components/Navbar';
+
 // Placeholder image if generation fails or is loading
 // Placeholder image import removed
 
@@ -27,17 +29,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg-primary)] text-white overflow-x-hidden font-sans selection:bg-[#00ff88] selection:text-black">
+      <Navbar />
       <main className="container mx-auto px-4 py-8 max-w-md md:max-w-4xl">
-
-        {/* Header */}
-        <header className="text-center mb-10">
-          <h1 className="text-4xl md:text-6xl font-black mb-2 text-white tracking-tight">
-            GOAL RUSH
-          </h1>
-          <p className="text-gray-400 text-sm md:text-base font-medium">
-            The Ultimate Face-Off
-          </p>
-        </header>
 
         {/* Hero Section */}
         <FaceOff imagePath={heroImage} />
