@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.30;
+
+import {ReentrancyGuard} from "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
+import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
+import {Pausable} from "lib/openzeppelin-contracts/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+contract MbappeVsHalaand {
+    address public vault;
+    uint256 public totalMbappeStake;
+    uint256 public totalHalaandStake;
+
+    mapping(string => mapping(address => uint256)) public stakesBytoken;
+    mapping(address => mapping(string => uint256)) public stakes;
+
+    mapping(address => uint256) public balance;
+    mapping(address => mapping(address => uint256)) public tokenBalance;
+
+    constructor(address _vault) {
+        vault = _vault;
+    }
+
+    function Halaand(uint256 amount, address token) external payable {
+        address sender = msg.sender;
+        if (token != address(0)) {
+            IERC20(token).transferFrom(sender, address(vault), amount);
+        } else {
+            (bool success,) = payable(vault).call{value: msg.value}("");
+            require(success, "transfer failed");
+        }
+        stakesBytoken["Halaand"][token] += amount;
+        stakes[sender]["Halaand"] += amount;
+        totalHalaandStake += amount;
+    }
+
+    function Mbappe(uint256 amount, address token) external payable {
+        address sender = msg.sender;
+        if (token != address(0)) {
+            IERC20(token).transferFrom(sender, address(vault), amount);
+        } else {
+            (bool success,) = payable(vault).call{value: msg.value}("");
+            require(success, "transfer failed");
+        }
+        stakesBytoken["Mbappe"][token] += amount;
+        stakes[sender]["Mbappe"] += amount;
+        totalMbappeStake += amount;
+    }
+
+    function getStake(address user, string memory player) external view returns (uint256) {
+        return stakes[user][player];
+    }
+
+    function getStakeByToken(string memory player, address token) external view returns (uint256) {
+        return stakesBytoken[player][token];
+    }
+
+  receive() external payable {}
+}
