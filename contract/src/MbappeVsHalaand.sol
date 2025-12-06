@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract MbappeVsHalaand {
     address public vault;
+    address public USDT;
+    address public USDC;
     uint256 public totalMbappeStake;
     uint256 public totalHalaandStake;
 
@@ -17,11 +19,14 @@ contract MbappeVsHalaand {
     mapping(address => uint256) public balance;
     mapping(address => mapping(address => uint256)) public tokenBalance;
 
-    constructor(address _vault) {
+    constructor(address _vault, address _usdt, address _usdc) {
         vault = _vault;
+        USDT = _usdt;
+        USDC = _usdc;
     }
 
-    function Halaand(uint256 amount, address token) external payable {
+    function Halaand(uint256 amount, address token) external payable {require(token == USDT || token == USDC || token == address(0), "Invalid token");
+        require(token == USDT || token == USDC, "Invalid token");
         address sender = msg.sender;
         if (token != address(0)) {
             IERC20(token).transferFrom(sender, address(vault), amount);
@@ -35,6 +40,7 @@ contract MbappeVsHalaand {
     }
 
     function Mbappe(uint256 amount, address token) external payable {
+        require(token == USDT || token == USDC, "Invalid token");
         address sender = msg.sender;
         if (token != address(0)) {
             IERC20(token).transferFrom(sender, address(vault), amount);
