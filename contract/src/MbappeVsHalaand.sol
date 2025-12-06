@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.30;
+pragma solidity ^0.8.19;
 
-import {ReentrancyGuard} from "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
-import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
-import {Pausable} from "lib/openzeppelin-contracts/contracts/utils/Pausable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract MbappeVsHalaand {
+contract MbappeVsHalaand is ReentrancyGuard {
     address public vault;
     address public USDT;
     address public USDC;
@@ -25,29 +25,20 @@ contract MbappeVsHalaand {
         USDC = _usdc;
     }
 
-    function Halaand(uint256 amount, address token) external payable {require(token == USDT || token == USDC || token == address(0), "Invalid token");
+    function Halaand(uint256 amount, address token) external nonReentrant {
         require(token == USDT || token == USDC, "Invalid token");
         address sender = msg.sender;
-        if (token != address(0)) {
-            IERC20(token).transferFrom(sender, address(vault), amount);
-        } else {
-            (bool success,) = payable(vault).call{value: msg.value}("");
-            require(success, "transfer failed");
-        }
+        IERC20(token).transferFrom(sender, address(vault), amount);
         stakesBytoken["Halaand"][token] += amount;
         stakes[sender]["Halaand"] += amount;
         totalHalaandStake += amount;
     }
 
-    function Mbappe(uint256 amount, address token) external payable {
+    function Mbappe(uint256 amount, address token) external nonReentrant {
         require(token == USDT || token == USDC, "Invalid token");
         address sender = msg.sender;
-        if (token != address(0)) {
-            IERC20(token).transferFrom(sender, address(vault), amount);
-        } else {
-            (bool success,) = payable(vault).call{value: msg.value}("");
-            require(success, "transfer failed");
-        }
+
+        IERC20(token).transferFrom(sender, address(vault), amount);       
         stakesBytoken["Mbappe"][token] += amount;
         stakes[sender]["Mbappe"] += amount;
         totalMbappeStake += amount;
